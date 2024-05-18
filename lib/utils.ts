@@ -1,6 +1,26 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { ReadonlyURLSearchParams } from "next/navigation";
+import queryString from "query-string";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
+export const updateQueryParams = (
+  route: string | null,
+  value: string,
+  key: string,
+  searchParams: ReadonlyURLSearchParams
+) => {
+  const existingParams = Object.fromEntries(searchParams); // Convert searchParams to an object
+  const updatedParams = {
+    ...existingParams,
+    [key]: value === "" ? undefined : value,
+  };
+
+  const queryStringified = queryString.stringify(updatedParams);
+
+  const url = `${route || ""}?${queryStringified}`;
+
+  return url;
+};
