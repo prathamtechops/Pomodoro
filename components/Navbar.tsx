@@ -5,12 +5,12 @@ import { ModeToggle } from "./mode-toggle";
 
 const Navbar = () => {
   return (
-    <div className="flex items-center justify-between p-2">
-      <h1 className="text-2xl font-bold">Pomodoro</h1>
+    <div className="flex items-center justify-between p-4">
+      <h1 className="text-2xl  font-bold  md:text-3xl">Pomodoro</h1>
       <div className="space-x-4">
         {navLinks.map((link) => (
           <Link
-            className=" text-xl text-gray-500  hover:underline  dark:text-gray-400"
+            className="text-xs text-gray-500 hover:underline  dark:text-gray-400  md:text-xl"
             key={link.name}
             href={link.href}
           >
