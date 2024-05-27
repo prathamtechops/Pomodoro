@@ -5,15 +5,11 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password?: string;
-  studySessions: [
-    {
-      type: Schema.Types.ObjectId;
-      ref: "StudySession";
-    },
-  ];
+  studySessions: Schema.Types.ObjectId[];
+  totalStudyTime: number;
 }
 
-const userSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUser>(
   {
     clerkId: {
       type: String,
@@ -33,15 +29,19 @@ const userSchema = new Schema<IUser>(
     studySessions: [
       {
         type: Schema.Types.ObjectId,
-        ref: "StudySession",
+        ref: "Session",
       },
     ],
+    totalStudyTime: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const User = models.User || model<IUser>("User", userSchema);
+const User = models.User || model<IUser>("User", UserSchema);
 
 export default User;

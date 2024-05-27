@@ -1,35 +1,26 @@
 import { Document, Schema, model, models } from "mongoose";
 
-export interface IStudySession extends Document {
-  userId: {
-    type: Schema.Types.ObjectId;
-    ref: "User";
-  };
-  duration: {
-    type: Number;
-  };
-  startTime: {
-    type: Date;
-  };
-  endTime: {
-    type: Date;
-  };
+export interface ISession extends Document {
+  userId: Schema.Types.ObjectId;
+  duration: number;
+  repetition: number;
+  createdAt: Date;
 }
 
-const studySessionSchema = new Schema<IStudySession>(
+const SessionSchema = new Schema<ISession>(
   {
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     duration: {
       type: Number,
+      required: true,
     },
-    startTime: {
-      type: Date,
-    },
-    endTime: {
-      type: Date,
+    repetition: {
+      type: Number,
+      required: true,
     },
   },
   {
@@ -37,8 +28,6 @@ const studySessionSchema = new Schema<IStudySession>(
   }
 );
 
-const StudySession =
-  models.StudySession ||
-  model<IStudySession>("StudySession", studySessionSchema);
+const Session = models.Session || model<ISession>("Session", SessionSchema);
 
-export default StudySession;
+export default Session;

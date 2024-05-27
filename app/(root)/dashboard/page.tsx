@@ -1,26 +1,21 @@
-"use client";
+import { Chart } from "@/components/Chart";
+import { getUserById } from "@/lib/actions/user.actions";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
+export default async function Page() {
+  const { userId } = auth();
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+  if (!userId) {
+    redirect("/sign-in");
+  }
 
-export default function Page() {
+  const user = await getUserById({ clerkId: userId });
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   return (
     <main className="flex size-full flex-col gap-8 p-6 md:p-10">
       <div className="flex flex-col items-center gap-2">
@@ -31,54 +26,9 @@ export default function Page() {
       </div>
       <div className="flex size-full  items-center justify-center gap-4 ">
         <div className=" size-[400px] md:h-[300px] md:w-[600px] ">
-          <BarChart />
+          <Chart userId={JSON.parse(JSON.stringify(user._id))} />
         </div>
       </div>
     </main>
   );
 }
-
-const BarChart = () => {
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: "rgba(255, 255, 255, 0.3)",
-
-        borderColor: [
-          "rgba(0, 0, 0, 1)",
-          "rgba(0, 0, 0, 1)",
-          "rgba(0, 0, 0, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
-
-  return (
-    <div className="size-full rounded-lg bg-background p-4 shadow-lg">
-      <Bar data={data} options={options} />
-    </div>
-  );
-};
